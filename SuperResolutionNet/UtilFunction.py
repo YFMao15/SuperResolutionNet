@@ -14,7 +14,7 @@ from skimage.exposure import rescale_intensity
 
 def crop_image(data,image_size,sub_size,crop_strides):
     block_list=[]
-    max_range=crop_strides*((image_size-sub_size)//crop_strides)
+    max_range=crop_strides*((image_size-sub_size+crop_strides)//crop_strides)
     scanning_num=max_range//crop_strides
     for row in range(0,max_range,crop_strides):
         for col in range(0,max_range,crop_strides): 
@@ -32,7 +32,7 @@ def reconstruct_image(data_directory,classified_data_folder,reconstruction_folde
         # mask reconstructs overlapped image
         mask=np.zeros((image_size,image_size,prediction.shape[3]))
         sub_mask=np.ones((sub_size,sub_size,prediction.shape[3]))
-        max_range=crop_strides*((image_size-sub_size)//crop_strides)
+        max_range=crop_strides*((image_size-sub_size+crop_strides)//crop_strides)
         for row in range(0,max_range,crop_strides):
             for col in range(0,max_range,crop_strides): 
                 mask[row:row+sub_size:,col:col+sub_size,:]+=sub_mask
@@ -97,7 +97,7 @@ def reconstruct_image(data_directory,classified_data_folder,reconstruction_folde
     elif running_mode=='test':
         classified_test_folder=args[0]
         prediction=args[1]
-        max_range=crop_strides*((image_size-sub_size)//crop_strides)
+        max_range=crop_strides*((image_size-sub_size+crop_strides)//crop_strides)
         mask=np.zeros((image_size,image_size,prediction.shape[3]))
         sub_mask=np.ones((sub_size,sub_size,prediction.shape[3]))
         for row in range(0,max_range,crop_strides):
